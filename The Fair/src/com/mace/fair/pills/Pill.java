@@ -64,7 +64,6 @@ public class Pill {
 		 */
 		if (!isEaten)
 			g.drawImage(img, x * tileSize, y * tileSize);
-		g.draw(collider);
 	}
 
 	/*

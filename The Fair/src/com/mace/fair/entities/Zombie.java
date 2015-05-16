@@ -44,7 +44,6 @@ public class Zombie {
 	}
 
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-
 		if (!cheatExterminate) {
 			if (!flipped) {
 				if (isRunning)
@@ -58,7 +57,6 @@ public class Zombie {
 					g.drawImage(run2, x * tileSize, y * tileSize);
 			}
 		}
-		g.draw(collider);
 	}
 
 	public void update(GameContainer gc, StateBasedGame sbg, long delta, Player p, boolean cheatFrozen, boolean cheatExterminate) throws SlickException {
