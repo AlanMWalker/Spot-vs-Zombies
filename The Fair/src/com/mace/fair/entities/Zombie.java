@@ -139,6 +139,7 @@ public class Zombie {
 	}
 
 	public void resetZombie() {
+		
 		isAlive = true;
 		flipped = false;
 		isRunning = false;

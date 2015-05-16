@@ -82,7 +82,7 @@ public class GameState1 extends BasicGameState {
 		if (pills == null) {
 			pills = new ArrayList<Pill>();
 			for (int i = 0; i < MAX_PILLS; ++i) {
-				pills.add(new Pill(map));
+				pills.add(new Pill(map, i));
 				pills.get(i).init(gc);
 			}
 		} else {
@@ -155,6 +155,7 @@ public class GameState1 extends BasicGameState {
 		}
 		if (input.isKeyPressed(Input.KEY_F))
 			cheatFrozen = !cheatFrozen;
+		
 		if (input.isKeyPressed(Input.KEY_X))
 			cheatExterminate = !cheatExterminate;
 
@@ -168,7 +169,7 @@ public class GameState1 extends BasicGameState {
 						z.isFleeing(player.auraState());
 					}
 				}
-				updatingZombie = !updatingZombie;
+				updatingZombie = false;
 			}
 
 		} else {
