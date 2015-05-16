@@ -12,11 +12,12 @@ import org.newdawn.slick.tiled.TiledMap;
 import com.mace.fair.constants.Constants;
 
 public class Map {
-	
+
 	private final int TILESIZE;
 	private final int HOLE_TILE;
 	private TiledMap map;
 	private Random rnd;
+	private boolean hasBeenPlaced;
 
 	public Map() {
 		TILESIZE = Constants.TILESIZE;
@@ -24,6 +25,7 @@ public class Map {
 	}
 
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+		hasBeenPlaced = false;
 		rnd = new Random(System.currentTimeMillis());
 		map = new TiledMap(Constants.temp_map_1);
 		System.out.println(map.getTileId(1, 2, 0));
@@ -38,21 +40,44 @@ public class Map {
 
 	}
 
-	private void placeHolesOnMap() {
+	public void placeHolesOnMap() {
 		int x, y;
+		if (!hasBeenPlaced) {
+			for (int i = 0; i < 12; ++i) {
 
-		for (int i = 0; i < 12; ++i) {
-
-			x = rnd.nextInt(map.getWidth());
-			y = rnd.nextInt(map.getHeight());
-			map.getTileId(x, y, 0);
-
-			while (map.getTileId(x, y, 0) == Constants.WALL_TILE_ID || map.getTileId(x, y, 0) == Constants.HOLE_TILE_ID) {
 				x = rnd.nextInt(map.getWidth());
 				y = rnd.nextInt(map.getHeight());
 				map.getTileId(x, y, 0);
+
+				while (map.getTileId(x, y, 0) == Constants.WALL_TILE_ID || map.getTileId(x, y, 0) == Constants.HOLE_TILE_ID) {
+					x = rnd.nextInt(map.getWidth());
+					y = rnd.nextInt(map.getHeight());
+					map.getTileId(x, y, 0);
+				}
+				map.setTileId(x, y, 0, HOLE_TILE);
 			}
-			map.setTileId(x, y, 0, HOLE_TILE);
+			hasBeenPlaced = true;
+		} else {
+
+			try {
+				map = new TiledMap(Constants.temp_map_1);
+			} catch (SlickException e) {
+				e.printStackTrace();
+			}
+			for (int i = 0; i < 12; ++i) {
+
+				x = rnd.nextInt(map.getWidth());
+				y = rnd.nextInt(map.getHeight());
+				map.getTileId(x, y, 0);
+
+				while (map.getTileId(x, y, 0) == Constants.WALL_TILE_ID || map.getTileId(x, y, 0) == Constants.HOLE_TILE_ID) {
+					x = rnd.nextInt(map.getWidth());
+					y = rnd.nextInt(map.getHeight());
+					map.getTileId(x, y, 0);
+				}
+				map.setTileId(x, y, 0, HOLE_TILE);
+			}
+
 		}
 
 	}

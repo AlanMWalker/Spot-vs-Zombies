@@ -55,7 +55,8 @@ public class GameState1 extends BasicGameState {
 		if (map == null) {
 			map = new Map();
 			map.init(gc, sbg);
-		}else{ 
+		} else {
+			map.placeHolesOnMap();
 			resetState();
 		}
 		if (player == null) {
@@ -73,7 +74,7 @@ public class GameState1 extends BasicGameState {
 				zombies.get(i).init(gc, sbg);
 			}
 		} else {
-			for(Zombie z : zombies){ 
+			for (Zombie z : zombies) {
 				z.resetZombie();
 			}
 		}
@@ -88,7 +89,7 @@ public class GameState1 extends BasicGameState {
 			for (Pill p : pills) {
 				p.resetPill();
 			}
-			
+
 		}
 
 		if (camera == null)
@@ -117,14 +118,16 @@ public class GameState1 extends BasicGameState {
 		camera.translate(g, player);
 
 		map.render(gc, sbg, g);
+
+		for (Pill p : pills) {
+			p.render(g);
+		}
 		for (Zombie z : zombies) {
 			if (z.isZombieAlive()) {
 				z.render(gc, sbg, g);
 			}
 		}
-		for (Pill p : pills) {
-			p.render(g);
-		}
+
 		player.render(gc, sbg, g);
 		LivesGUI.render(g, player, camera);
 
@@ -155,7 +158,7 @@ public class GameState1 extends BasicGameState {
 		}
 		if (input.isKeyPressed(Input.KEY_F))
 			cheatFrozen = !cheatFrozen;
-		
+
 		if (input.isKeyPressed(Input.KEY_X))
 			cheatExterminate = !cheatExterminate;
 
@@ -213,7 +216,7 @@ public class GameState1 extends BasicGameState {
 			if (!z.isZombieAlive())
 				++zombieCounter;
 		}
-		if (zombieCounter == MAX_ZOMBIES && pillCounter == Constants.MAX_PILLS) {
+		if (zombieCounter == MAX_ZOMBIES && pillCounter == MAX_PILLS) {
 			// LivesGUI.resetLives();
 			gameWon = true;
 		}
@@ -223,7 +226,7 @@ public class GameState1 extends BasicGameState {
 	public void resetState() {
 
 		LivesGUI.resetLives();
-		cheatFrozen = false; 
+		cheatFrozen = false;
 		cheatExterminate = false;
 		isGameActive = true;
 	}

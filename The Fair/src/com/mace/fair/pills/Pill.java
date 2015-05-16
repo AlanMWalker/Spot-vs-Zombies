@@ -13,7 +13,7 @@ import com.mace.fair.constants.Constants;
 import com.mace.fair.map.Map;
 
 /* 
- * TODO Fix endlessly eatable pill
+ * TODO Pills can't spawn within 5 tiles of one another
  */
 public class Pill {
 
@@ -39,13 +39,13 @@ public class Pill {
 		// Initialise random with a seed of the PCs current time in Milliseconds
 		rnd = new Random(System.currentTimeMillis() * (index + 1));
 		// Set the image to a scaled down version of the pills
-		img = new Image(Constants.pill_img_loc).getScaledCopy(0.5f);
+		img = new Image(Constants.pill_img_loc);
 		// initialise the isEaten variable to false
 		isEaten = false;
 		// While the pills x & y fall on an x & y position matching a hole or
 		// wall
 		// loop through an randomise the position again
-		while (map.getTileProperty(x, y).equals("falling") || map.getTileProperty(x, y).equals("blocked")) {
+		while (map.getTileProperty(x, y).equals("falling") || map.getTileProperty(x, y).equals("blocked") || isOnPlayer(x, y)) {
 			x = rnd.nextInt(map.getWidth());
 			y = rnd.nextInt(map.getHeight());
 		}
@@ -80,6 +80,12 @@ public class Pill {
 		oldX = x;
 		oldY = y;
 		collider.setLocation(x * tileSize, y * tileSize);
+	}
+
+	private boolean isOnPlayer(int x, int y) {
+		if (x == (map.getPlayerStart().x / tileSize) && y == (map.getPlayerStart().y / tileSize))
+			return true;
+		return false;
 	}
 
 	public Vector2f location() {
