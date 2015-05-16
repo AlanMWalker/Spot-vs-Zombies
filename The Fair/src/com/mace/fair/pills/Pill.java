@@ -55,7 +55,6 @@ public class Pill {
 		// initialise the pills collider to the location of the image & size
 		collider = new Rectangle(x * tileSize, y * tileSize, img.getWidth(), img.getHeight());
 
-		System.out.println("X  = " + x + " Y = " + y);
 	}
 
 	public void render(Graphics g) throws SlickException {
@@ -65,7 +64,7 @@ public class Pill {
 		 */
 		if (!isEaten)
 			g.drawImage(img, x * tileSize, y * tileSize);
-
+		g.draw(collider);
 	}
 
 	/*
@@ -81,6 +80,7 @@ public class Pill {
 		}
 		oldX = x;
 		oldY = y;
+		collider.setLocation(x * tileSize, y * tileSize);
 	}
 
 	public Vector2f location() {

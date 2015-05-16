@@ -62,6 +62,7 @@ public class Player {
 			else
 				g.drawImage(playerAura2, x * tileSize, y * tileSize);
 		}
+		g.draw(collider);
 	}
 
 	public void update(GameContainer gc, StateBasedGame sbg, long delta, ArrayList<Pill> pills) throws SlickException {
@@ -133,6 +134,7 @@ public class Player {
 		moveCount = 0;
 		x = (int) map.getPlayerStart().x / tileSize;
 		y = (int) map.getPlayerStart().y / tileSize;
+		System.out.println("YO!");
 	}
 	private void updateRect() {
 		collider.setLocation(x * tileSize, y * tileSize);

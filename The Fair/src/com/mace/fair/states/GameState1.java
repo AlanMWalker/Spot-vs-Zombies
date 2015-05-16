@@ -46,7 +46,7 @@ public class GameState1 extends BasicGameState {
 	}
 
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-
+		System.out.println("initialised");
 		gameWon = false;
 		cheatFrozen = false;
 		cheatExterminate = false;

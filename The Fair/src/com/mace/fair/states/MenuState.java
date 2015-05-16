@@ -23,6 +23,7 @@ public class MenuState extends BasicGameState {
 	private int creditsX, creditsY;
 	private Rectangle play, credits, help, cheats;
 	private boolean isShowingCheats;
+	private int playPressedCount = 0;
 
 	public MenuState(int stateID) {
 		this.stateID = stateID;
@@ -78,8 +79,10 @@ public class MenuState extends BasicGameState {
 
 		if (play.contains(mouseX, mouseY)) {
 			if (gc.getInput().isMousePressed(0)) {
-				sbg.getState(Constants.GameState1).init(gc, sbg);
+				if (playPressedCount > 0)
+					sbg.getState(Constants.GameState1).init(gc, sbg);
 				sbg.enterState(Constants.GameState1);
+				++playPressedCount;
 			}
 		}
 		if (help.contains(mouseX, mouseY)) {
