@@ -65,7 +65,7 @@ public class Zombie {
 		Vector2f moveBy = determineDirection(p);
 		this.cheatExterminate = cheatExterminate;
 
-		if (!cheatFrozen || !cheatExterminate) {
+		if (!cheatFrozen && !cheatExterminate) {
 			if (map.getTileProperty(x + moveBy.x, y + moveBy.y).equals("walkable")) {
 				x += moveBy.x;
 				y += moveBy.y;
@@ -139,7 +139,7 @@ public class Zombie {
 	}
 
 	public void resetZombie() {
-		
+
 		isAlive = true;
 		flipped = false;
 		isRunning = false;

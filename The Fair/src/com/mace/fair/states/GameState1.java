@@ -46,7 +46,6 @@ public class GameState1 extends BasicGameState {
 	}
 
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		System.out.println("initialised");
 		gameWon = false;
 		cheatFrozen = false;
 		cheatExterminate = false;
@@ -148,6 +147,7 @@ public class GameState1 extends BasicGameState {
 		mouseX = Mouse.getX();
 		mouseY = Display.getHeight() - Mouse.getY(); // Convert the mouse
 														// co-ordinates
+
 		if (input.isKeyPressed(Input.KEY_P) || input.isKeyPressed(Input.KEY_ESCAPE)) {
 			isGameActive = !isGameActive;
 			if (isGameActive)
@@ -159,6 +159,7 @@ public class GameState1 extends BasicGameState {
 		if (input.isKeyPressed(Input.KEY_X))
 			cheatExterminate = !cheatExterminate;
 
+		System.out.println(cheatFrozen);
 		if (isGameActive) {
 			checkWinState();
 			player.update(gc, sbg, delta, pills);

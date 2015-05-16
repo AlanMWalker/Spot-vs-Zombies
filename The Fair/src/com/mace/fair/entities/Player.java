@@ -69,6 +69,7 @@ public class Player {
 		Input input = gc.getInput(); // Input handling object
 
 		if (input.isKeyPressed(Input.KEY_LEFT) || input.isKeyPressed(Input.KEY_A)) {
+			input.clearKeyPressedRecord();
 			if (map.getTileProperty(x - 1, y).equals("walkable") || map.getTileProperty(x - 1, y).equals("fallable")) {
 				if (map.getTileProperty(x - 1, y).equals("fallable"))
 					LivesGUI.decrement();
@@ -78,8 +79,8 @@ public class Player {
 				flipped = !flipped;
 				CountStep();
 			}
-		}
-		if (input.isKeyPressed(Input.KEY_RIGHT) || input.isKeyPressed(Input.KEY_D)) {
+		} else if (input.isKeyPressed(Input.KEY_RIGHT) || input.isKeyPressed(Input.KEY_D)) {
+			input.clearKeyPressedRecord();
 			if (map.getTileProperty(x + 1, y).equals("walkable") || map.getTileProperty(x + 1, y).equals("fallable")) {
 				if (map.getTileProperty(x + 1, y).equals("fallable"))
 					LivesGUI.decrement();
@@ -89,22 +90,21 @@ public class Player {
 				flipped = !flipped;
 				CountStep();
 			}
-		}
-		if (input.isKeyPressed(Input.KEY_UP) || input.isKeyPressed(Input.KEY_W)) {
+		} else if (input.isKeyPressed(Input.KEY_UP) || input.isKeyPressed(Input.KEY_W)) {
+			input.clearKeyPressedRecord();
 			if (map.getTileProperty(x, y - 1).equals("walkable") || map.getTileProperty(x, y - 1).equals("fallable")) {
 				if (map.getTileProperty(x, y - 1).equals("fallable"))
 					LivesGUI.decrement();
-
 				y -= 1;
 				updateRect();
 				GameState1.moveEntities();
 				flipped = !flipped;
 				CountStep();
 			}
-		}
-		if (input.isKeyPressed(Input.KEY_DOWN) || input.isKeyPressed(Input.KEY_S)) {
+		} else if (input.isKeyPressed(Input.KEY_DOWN) || input.isKeyPressed(Input.KEY_S)) {
+			input.clearKeyPressedRecord();
 			if (map.getTileProperty(x, y + 1).equals("walkable") || map.getTileProperty(x, y + 1).equals("fallable")) {
-				if( map.getTileProperty(x, y + 1).equals("fallable"))
+				if (map.getTileProperty(x, y + 1).equals("fallable"))
 					LivesGUI.decrement();
 				y += 1;
 				updateRect();
@@ -127,15 +127,16 @@ public class Player {
 		}
 
 	}
-	
-	public void resetPlayer(){ 
+
+	public void resetPlayer() {
 		isAuraActive = false;
 		flipped = false;
 		moveCount = 0;
 		x = (int) map.getPlayerStart().x / tileSize;
 		y = (int) map.getPlayerStart().y / tileSize;
-		System.out.println("YO!");
+		collider.setLocation(x * tileSize, y * tileSize);
 	}
+
 	private void updateRect() {
 		collider.setLocation(x * tileSize, y * tileSize);
 	}
