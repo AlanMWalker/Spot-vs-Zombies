@@ -22,12 +22,12 @@ public class Constants {
 
 	public static final String player1_image_loc = "res//player_0.png";
 	public static final String player2_image_loc = "res//player_1.png";
-	public static final String playerAura1_img_loc = "res//player_2.png"; 
+	public static final String playerAura1_img_loc = "res//player_2.png";
 	public static final String playerAura2_img_loc = "res//player_3.png";
 	public static final String zombie1_image_loc = "res//zombie_0.png";
 	public static final String zombie2_image_loc = "res//zombie_1.png";
 	public static final String zombieAway1_img_loc = "res//zombie_2.png";
-	public static final String zombieAway2_img_loc = "res//zombie_3.png"; 
+	public static final String zombieAway2_img_loc = "res//zombie_3.png";
 	public static final String pill_img_loc = "res//pill.png";
 	public static final String lives_img_loc = "res//life.png";
 	public static final String icon_img_loc = "res//windowIcon.png";
@@ -47,7 +47,7 @@ public class Constants {
 	/****************************
 	 * GAME CONSTANTS
 	 ****************************/
-	
+
 	public static final int TILESIZE = 64;
 	public static final int MAX_ZOMBIES = 4;
 	public static final int MAX_PILLS = 5;
@@ -56,6 +56,7 @@ public class Constants {
 	public static final int HOLE_TILE_ID = 3;
 	public static final int MAX_MOVE = 10;
 	public static final int START_LIVES = 3;
+	public static final int MAX_HOLES = 12;
 
 	/****************************
 	 * STATE IDs
