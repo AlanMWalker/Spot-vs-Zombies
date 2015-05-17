@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import com.mace.fair.constants.Constants;
 import com.mace.fair.entities.Player;
 import com.mace.fair.entities.Zombie;
 import com.mace.fair.gui.LivesGUI;
@@ -40,9 +41,11 @@ public class GameLoadHandler {
 				boolean exterminate = Boolean.parseBoolean(loadData.next());
 				playState.loadData(active, frozen, exterminate);
 				loadPlayer();
+				loadZombies();
+				loadPills();
+				loadMap();
 			}
 		} catch (Exception e) {
-			System.out.println("No loadable file!");
 		}
 
 	}
@@ -55,7 +58,6 @@ public class GameLoadHandler {
 		x = Integer.parseInt(temp);
 		temp = loadData.next();
 		y = Integer.parseInt(temp);
-		System.out.println("X = " + x + " Y = " + y);
 		temp = loadData.next();
 		aura = Boolean.parseBoolean(temp);
 		temp = loadData.next();
@@ -68,16 +70,37 @@ public class GameLoadHandler {
 
 	private void loadZombies() {
 		int x, y;
-		boolean flipped, running;
-		String temp;
+		boolean flipped, running, alive;
+		// String temp;
+		for (int i = 0; i < Constants.MAX_ZOMBIES; ++i) {
+			x = Integer.parseInt(loadData.next());
+			y = Integer.parseInt(loadData.next());
+			running = Boolean.parseBoolean(loadData.next());
+			flipped = Boolean.parseBoolean(loadData.next());
+			alive = Boolean.parseBoolean(loadData.next());
+
+			zombies.get(i).loadZombieData(x, y, running, flipped, alive);
+		}
 
 	}
 
 	private void loadPills() {
-
+		int x, y;
+		boolean eaten;
+		for (int i = 0; i < Constants.MAX_PILLS; ++i) {
+			x = Integer.parseInt(loadData.next());
+			y = Integer.parseInt(loadData.next());
+			eaten = Boolean.parseBoolean(loadData.next());
+			pills.get(i).loadData(x, y, eaten);
+		}
 	}
 
 	private void loadMap() {
-
+		int x, y;
+		for (int i = 0; i < Constants.MAX_HOLES; ++i) {
+			x = Integer.parseInt(loadData.next());
+			y = Integer.parseInt(loadData.next());
+			map.setHolePosition(x, y);
+		}
 	}
 }

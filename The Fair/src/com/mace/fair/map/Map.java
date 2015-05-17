@@ -33,7 +33,6 @@ public class Map {
 		hasBeenPlaced = false;
 		rnd = new Random(System.currentTimeMillis());
 		map = new TiledMap(Constants.temp_map_1);
-		System.out.println(map.getTileId(1, 2, 0));
 		placeHolesOnMap();
 	}
 
@@ -125,6 +124,17 @@ public class Map {
 		return new Vector2f(map.getObjectX(1, index), map.getObjectY(1, index));
 	}
 
+	public void resetMap() {
+		try {
+			map = new TiledMap(Constants.temp_map_1);
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void setHolePosition(int x, int y){ 
+		map.setTileId(x, y, 0, HOLE_TILE);
+	}
 	public String getTileProperty(int x, int y) {
 		int tileID = map.getTileId(x, y, 0);
 		String tileProperty = "walkable";
