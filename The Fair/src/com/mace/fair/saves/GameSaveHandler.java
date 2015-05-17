@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Formatter;
 
+import com.mace.fair.constants.Constants;
 import com.mace.fair.entities.Player;
 import com.mace.fair.entities.Zombie;
 import com.mace.fair.gui.LivesGUI;
@@ -25,12 +26,15 @@ public class GameSaveHandler {
 		this.pills = pills;
 	}
 
-	public void saveGame() throws IOException {
+	public void saveGame(boolean updatingZombies) throws IOException {
 		/*
 		 * Save order = Player -> Zombies -> Pills -> Holes (map)
 		 */
 		try {
 			save_file = new Formatter("spot_save_game.scr");
+
+			String updating = Boolean.toString(updatingZombies);
+			save_file.format("%s\n\n", updating);
 			savePlayer();
 			saveZombies();
 			savePills();
@@ -43,17 +47,39 @@ public class GameSaveHandler {
 	}
 
 	private void savePlayer() throws IOException {
-		save_file.format("%d\n%d", (int) player.getTilePosition().x, (int)player.getTilePosition().y); //Saving player position
-		save_file.format("\n%s\n%s", Boolean.toString(player.auraState()), Boolean.toString(player.isFlippedSprite())); //Saving sprite data
-		save_file.format("\n%d", LivesGUI.getLives());
+		save_file.format("%d\n%d", (int) player.getTilePosition().x, (int) player.getTilePosition().y); // Saving
+																										// player
+																										// position
+		save_file.format("\n%s\n%s", Boolean.toString(player.auraState()), Boolean.toString(player.isFlippedSprite())); // Saving
+																														// sprite
+																														// data
+		save_file.format("\n%d\n\n", LivesGUI.getLives());
 	}
 
 	private void saveZombies() {
 
+		for (int i = 0; i < Constants.MAX_ZOMBIES; ++i) {
+			int x = (int) zombies.get(i).getTilePosition().x;
+			int y = (int) zombies.get(i).getTilePosition().y;
+			String isRunning, isFlipped, isAlive;
+
+			isRunning = Boolean.toString(player.auraState());
+			isFlipped = Boolean.toString(zombies.get(i).isSpriteFlipped());
+			isAlive = Boolean.toString(zombies.get(i).isZombieAlive());
+
+			save_file.format("%d\n%d\n", x, y); // Save zombie posititions
+			// Save zombie sprite details
+			save_file.format("%s\n%s\n%s\n\n", isRunning, isFlipped, isAlive);
+
+		}
 	}
 
 	private void savePills() {
+		for (int i = 0; i < Constants.MAX_PILLS; ++i) {
+			int x;
+			int y;
 
+		}
 	}
 
 	private void saveMap() {

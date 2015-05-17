@@ -57,7 +57,7 @@ public class Zombie {
 					g.drawImage(run2, x * tileSize, y * tileSize);
 			}
 		}
-//		g.draw(collider);
+		// g.draw(collider);
 	}
 
 	public void update(GameContainer gc, StateBasedGame sbg, long delta, Player p, boolean cheatFrozen, boolean cheatExterminate) throws SlickException {
@@ -145,5 +145,13 @@ public class Zombie {
 		cheatExterminate = false;
 		x = (int) (map.getZombieStart(index).x / tileSize);
 		y = (int) (map.getZombieStart(index).y / tileSize);
+	}
+
+	public Vector2f getTilePosition() {
+		return new Vector2f(x, y);
+	}
+
+	public boolean isSpriteFlipped() {
+		return flipped;
 	}
 }

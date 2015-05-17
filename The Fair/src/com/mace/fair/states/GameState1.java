@@ -119,14 +119,9 @@ public class GameState1 extends BasicGameState {
 			resumeButton = new Rectangle(buttonX, buttonY, resume.getWidth(), resume.getHeight());
 		if (menuButton == null)
 			menuButton = new Rectangle(buttonX, buttonY, resume.getWidth(), resume.getHeight());
-		
+
 		save = new GameSaveHandler(player, map, zombies, pills);
-		try {
-			save.saveGame();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 	}
 
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
@@ -186,8 +181,22 @@ public class GameState1 extends BasicGameState {
 
 		if (input.isKeyPressed(Input.KEY_X))
 			cheatExterminate = !cheatExterminate;
-
-		System.out.println(cheatFrozen);
+		
+		// QUICKSAVE
+		if (input.isKeyPressed(Input.KEY_F5)) {
+			try {
+				save.saveGame(updatingZombie);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		if (input.isKeyPressed(Input.KEY_F9)) {
+			// TODO Quick-load
+		}
+		
+		
 		if (isGameActive) {
 			checkWinState();
 			player.update(gc, sbg, delta, pills);
