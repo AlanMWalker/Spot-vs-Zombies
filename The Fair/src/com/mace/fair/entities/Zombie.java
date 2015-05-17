@@ -57,7 +57,7 @@ public class Zombie {
 					g.drawImage(run2, x * tileSize, y * tileSize);
 			}
 		}
-		g.draw(collider);
+//		g.draw(collider);
 	}
 
 	public void update(GameContainer gc, StateBasedGame sbg, long delta, Player p, boolean cheatFrozen, boolean cheatExterminate) throws SlickException {

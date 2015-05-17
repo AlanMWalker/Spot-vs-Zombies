@@ -27,17 +27,19 @@ public class GameState1 extends BasicGameState {
 	private final int MAX_PILLS;
 	private int stateID;
 	private int mouseX, mouseY;
+	private ArrayList<Zombie> zombies;
+	private ArrayList<Pill> pills;
 	private Map map;
 	private Player player;
 	private Camera camera;
-	private ArrayList<Zombie> zombies;
-	private ArrayList<Pill> pills;
 	private static boolean updatingZombie = false;
 	private boolean isGameActive = true; // For if they hit escape
-	private Image menu, resume, overlay; // TODO implement
+	private boolean isMenu = false;
+	private Image menu, resume, overlay, winScreen, loseScreen; // TODO
+																// implement
 	private Rectangle resumeButton, menuButton;
 	private float buttonX, buttonY;
-	private boolean gameWon, cheatFrozen, cheatExterminate;
+	private boolean gameWon, gameLost, cheatFrozen, cheatExterminate;
 
 	public GameState1(int stateID) {
 		this.stateID = stateID;
@@ -47,6 +49,7 @@ public class GameState1 extends BasicGameState {
 
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		gameWon = false;
+		gameLost = false;
 		cheatFrozen = false;
 		cheatExterminate = false;
 
@@ -82,7 +85,7 @@ public class GameState1 extends BasicGameState {
 		if (pills == null) {
 			pills = new ArrayList<Pill>();
 			for (int i = 0; i < MAX_PILLS; ++i) {
-				pills.add(new Pill(map, i));
+				pills.add(new Pill(map, i, pills));
 				pills.get(i).init(gc);
 			}
 		} else {
@@ -103,6 +106,10 @@ public class GameState1 extends BasicGameState {
 
 		if (overlay == null)
 			overlay = new Image(Constants.overlay_img_loc);
+		if (winScreen == null)
+			winScreen = new Image(Constants.winScreen_text_loc);
+		if (loseScreen == null)
+			loseScreen = new Image(Constants.loseScreen_text_loc);
 
 		buttonX = resume.getWidth() / 0.9f;
 		buttonY = resume.getHeight() / 1.35f;
@@ -132,16 +139,24 @@ public class GameState1 extends BasicGameState {
 		LivesGUI.render(g, player, camera);
 
 		if (!isGameActive) {
-			int localX = (int) camera.getTranslation().x;
-			int localY = (int) camera.getTranslation().y;
+			if (isMenu) {
+				int localX = (int) camera.getTranslation().x;
+				int localY = (int) camera.getTranslation().y;
 
-			resumeButton.setLocation(localX + buttonX, localY + buttonY);
-			menuButton.setLocation(localX + buttonX, localY + (buttonY * 2.4f));
+				resumeButton.setLocation(localX + buttonX, localY + buttonY);
+				menuButton.setLocation(localX + buttonX, localY + (buttonY * 2.4f));
 
-			g.drawImage(overlay, camera.getTranslation().x, camera.getTranslation().y);
-			g.drawImage(resume, localX + buttonX, localY + buttonY);
-			g.drawImage(menu, (localX + buttonX), localY + buttonY * 2.4f);
-
+				g.drawImage(overlay, camera.getTranslation().x, camera.getTranslation().y);
+				g.drawImage(resume, localX + buttonX, localY + buttonY);
+				g.drawImage(menu, (localX + buttonX), localY + buttonY * 2.4f);
+			} else {
+				if (gameWon) {
+					g.drawImage(winScreen, camera.getTranslation().x, camera.getTranslation().y);
+				}
+				if (gameLost) {
+					g.drawImage(loseScreen, camera.getTranslation().x, camera.getTranslation().y);
+				}
+			}
 		}
 	}
 
@@ -153,6 +168,7 @@ public class GameState1 extends BasicGameState {
 
 		if (input.isKeyPressed(Input.KEY_P) || input.isKeyPressed(Input.KEY_ESCAPE)) {
 			isGameActive = !isGameActive;
+			isMenu = true;
 			if (isGameActive)
 				input.clearKeyPressedRecord();
 		}
@@ -177,24 +193,43 @@ public class GameState1 extends BasicGameState {
 			}
 
 		} else {
-			int localX = (int) camera.getTranslation().x;
-			int localY = (int) camera.getTranslation().y;
-			if (resumeButton.contains(mouseX + localX, mouseY + localY)) {
+			if (isMenu) {
+				int localX = (int) camera.getTranslation().x;
+				int localY = (int) camera.getTranslation().y;
+				if (resumeButton.contains(mouseX + localX, mouseY + localY)) {
 
-				if (input.isMousePressed(0)) {
-					input.clearKeyPressedRecord();
-					isGameActive = true;
+					if (input.isMousePressed(0)) {
+						input.clearKeyPressedRecord();
+						isGameActive = true;
+						isMenu = false;
+					}
 				}
-			}
-			if (menuButton.contains(mouseX + localX, mouseY + localY)) {
-				if (input.isMousePressed(0))
-					sbg.enterState(Constants.MenuState);
+				if (menuButton.contains(mouseX + localX, mouseY + localY)) {
+					if (input.isMousePressed(0))
+						sbg.enterState(Constants.MenuState);
+				}
+			} else {
+				if (gameWon) {
+					if (input.isKeyPressed(Input.KEY_B))
+						sbg.enterState(Constants.MenuState);
+				}
+				if (gameLost) {
+					if (input.isKeyPressed(Input.KEY_B))
+						sbg.enterState(Constants.MenuState);
+					if (input.isKeyPressed(Input.KEY_R)) {
+						resetState();
+						sbg.getState(Constants.GameState1).init(gc, sbg);
+					}
+				}
 			}
 		}
 
-		if (LivesGUI.isPlayerDead() || gameWon) {
-			// LivesGUI.resetLives();
-			sbg.enterState(0);
+		if (LivesGUI.isPlayerDead()) {
+			gameLost = true;
+		}
+		if (gameWon || gameLost) {
+			isGameActive = false;
+			isMenu = false;
 		}
 
 	}

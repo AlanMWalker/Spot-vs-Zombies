@@ -15,6 +15,8 @@ public class Map {
 
 	private final int TILESIZE;
 	private final int HOLE_TILE;
+	private final int MAX_HOLES;
+	private int oldX[], oldY[];
 	private TiledMap map;
 	private Random rnd;
 	private boolean hasBeenPlaced;
@@ -22,6 +24,9 @@ public class Map {
 	public Map() {
 		TILESIZE = Constants.TILESIZE;
 		HOLE_TILE = Constants.HOLE_TILE_ID;
+		MAX_HOLES = Constants.MAX_HOLES;
+		oldX = new int[Constants.MAX_HOLES];
+		oldY = new int[Constants.MAX_HOLES];
 	}
 
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
@@ -36,10 +41,6 @@ public class Map {
 		map.render(0, 0);
 	}
 
-	public void update(GameContainer gc, StateBasedGame sbg, long delta) throws SlickException {
-
-	}
-
 	public void placeHolesOnMap() {
 		int x, y;
 		if (!hasBeenPlaced) {
@@ -47,6 +48,8 @@ public class Map {
 
 				x = rnd.nextInt(map.getWidth());
 				y = rnd.nextInt(map.getHeight());
+				oldX[i] = x;
+				oldY[i] = y;
 				map.getTileId(x, y, 0);
 
 				while (map.getTileId(x, y, 0) == Constants.WALL_TILE_ID || map.getTileId(x, y, 0) == Constants.HOLE_TILE_ID) {
@@ -70,7 +73,7 @@ public class Map {
 				y = rnd.nextInt(map.getHeight());
 				map.getTileId(x, y, 0);
 
-				while (map.getTileId(x, y, 0) == Constants.WALL_TILE_ID || map.getTileId(x, y, 0) == Constants.HOLE_TILE_ID) {
+				while (map.getTileId(x, y, 0) == Constants.WALL_TILE_ID || map.getTileId(x, y, 0) == Constants.HOLE_TILE_ID && isOldPosition(x, y)) {
 					x = rnd.nextInt(map.getWidth());
 					y = rnd.nextInt(map.getHeight());
 					map.getTileId(x, y, 0);
@@ -80,6 +83,15 @@ public class Map {
 
 		}
 
+	}
+
+	private boolean isOldPosition(int x, int y) {
+
+		for (int i = 0; i < MAX_HOLES; ++i) {
+			if (x == oldX[i] && y == oldY[i])
+				return true;
+		}
+		return false;
 	}
 
 	public int getWidth() {

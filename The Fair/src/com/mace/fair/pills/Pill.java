@@ -1,5 +1,6 @@
 package com.mace.fair.pills;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import org.newdawn.slick.GameContainer;
@@ -19,6 +20,7 @@ public class Pill {
 
 	private final int tileSize; // length of each tile
 	private final int index; // array index of pills
+	private ArrayList<Pill> pills;
 	private Map map; // Map object to check tile properties
 	private int x, y; // X & Y position the pill will be rendered at
 	private int oldX, oldY;
@@ -28,10 +30,11 @@ public class Pill {
 								// for collisions
 	private boolean isEaten; // Determine if the pill is eaten
 
-	public Pill(Map m, int index) {
+	public Pill(Map m, int index, ArrayList<Pill> pills) {
 		// setup the final variables & initialise the map object
 		this.map = m;
 		this.index = index;
+		this.pills = pills;
 		tileSize = Constants.TILESIZE;
 	}
 
@@ -45,7 +48,9 @@ public class Pill {
 		// While the pills x & y fall on an x & y position matching a hole or
 		// wall
 		// loop through an randomise the position again
-		while (map.getTileProperty(x, y).equals("falling") || map.getTileProperty(x, y).equals("blocked") || isOnPlayer(x, y)) {
+		x = rnd.nextInt(map.getWidth());
+		y = rnd.nextInt(map.getHeight());
+		while (map.getTileProperty(x, y).equals("fallable") || map.getTileProperty(x, y).equals("blocked") || isOnPlayer(x, y) || tooCloseToPill(x,y)) {
 			x = rnd.nextInt(map.getWidth());
 			y = rnd.nextInt(map.getHeight());
 		}
@@ -55,6 +60,19 @@ public class Pill {
 		// initialise the pills collider to the location of the image & size
 		collider = new Rectangle(x * tileSize, y * tileSize, img.getWidth(), img.getHeight());
 
+	}
+
+	private boolean tooCloseToPill(int x, int y) {
+		if (index > 0) {
+			for (int i = index; i > 0; --i) {
+				if (x > 4 && x < 15 && y > 0 && y < 14) {
+					if ((pills.get(i).x > x - 5) && (pills.get(i).x < x + 5) && ((pills.get(i).x) > y - 5) && (pills.get(i).y < y + 5))
+						return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	public void render(Graphics g) throws SlickException {
