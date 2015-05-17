@@ -41,7 +41,11 @@ public class LivesGUI {
 		lives = Constants.START_LIVES;
 	}
 
-	public static final int getLives() {
+	public static int getLives() {
 		return lives;
+	}
+
+	public static void setLives(int l) {
+		lives = l;
 	}
 }

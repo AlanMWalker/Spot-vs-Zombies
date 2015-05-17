@@ -20,6 +20,7 @@ import com.mace.fair.entities.Zombie;
 import com.mace.fair.gui.LivesGUI;
 import com.mace.fair.map.Map;
 import com.mace.fair.pills.Pill;
+import com.mace.fair.saves.GameLoadHandler;
 import com.mace.fair.saves.GameSaveHandler;
 import com.mace.fair.entities.Player;
 
@@ -41,6 +42,7 @@ public class GameState1 extends BasicGameState {
 	private Rectangle resumeButton, menuButton;
 	private float buttonX, buttonY;
 	private GameSaveHandler save;
+	private GameLoadHandler load;
 	private boolean gameWon, gameLost, cheatFrozen, cheatExterminate;
 
 	public GameState1(int stateID) {
@@ -120,8 +122,10 @@ public class GameState1 extends BasicGameState {
 		if (menuButton == null)
 			menuButton = new Rectangle(buttonX, buttonY, resume.getWidth(), resume.getHeight());
 
-		save = new GameSaveHandler(player, map, zombies, pills);
-
+		if (save == null)
+			save = new GameSaveHandler(player, map, zombies, pills);
+		if (load == null)
+			load = new GameLoadHandler(player, map, zombies, pills, this);
 	}
 
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
@@ -181,22 +185,22 @@ public class GameState1 extends BasicGameState {
 
 		if (input.isKeyPressed(Input.KEY_X))
 			cheatExterminate = !cheatExterminate;
-		
+
 		// QUICKSAVE
 		if (input.isKeyPressed(Input.KEY_F5)) {
 			try {
-				save.saveGame(updatingZombie);
+				save.saveGame(updatingZombie, cheatFrozen, cheatExterminate);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		
+
 		if (input.isKeyPressed(Input.KEY_F9)) {
 			// TODO Quick-load
+			load.loadGame();
 		}
-		
-		
+
 		if (isGameActive) {
 			checkWinState();
 			player.update(gc, sbg, delta, pills);
@@ -274,6 +278,12 @@ public class GameState1 extends BasicGameState {
 			gameWon = true;
 		}
 
+	}
+
+	public void loadData(boolean update, boolean frozen, boolean exterminate) {
+		updatingZombie = update;
+		cheatFrozen = frozen;
+		cheatExterminate = exterminate;
 	}
 
 	public void resetState() {

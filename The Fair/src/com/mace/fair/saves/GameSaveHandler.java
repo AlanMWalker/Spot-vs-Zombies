@@ -25,7 +25,7 @@ public class GameSaveHandler {
 		this.pills = pills;
 	}
 
-	public void saveGame(boolean updatingZombies) throws IOException {
+	public void saveGame(boolean updatingZombies, boolean cheatFrozen, boolean cheatExterminate) throws IOException {
 		/*
 		 * Save order = Player -> Zombies -> Pills -> Holes (map)
 		 */
@@ -33,7 +33,10 @@ public class GameSaveHandler {
 			save_file = new Formatter("spot_save_game.scr");
 
 			String updating = Boolean.toString(updatingZombies);
-			save_file.format("%s\n\n", updating);
+			String frozen = Boolean.toString(cheatFrozen);
+			String exterminate = Boolean.toString(cheatExterminate);
+			
+			save_file.format("%s\n%s\n%s\n\n", updating, frozen, exterminate);
 			savePlayer();
 			saveZombies();
 			savePills();
@@ -74,7 +77,7 @@ public class GameSaveHandler {
 	}
 
 	private void savePills() {
-		/* 
+		/*
 		 * Save pills and their eaten state to the map
 		 */
 		for (int i = 0; i < Constants.MAX_PILLS; ++i) {

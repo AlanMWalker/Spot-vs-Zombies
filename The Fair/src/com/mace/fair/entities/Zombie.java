@@ -147,6 +147,14 @@ public class Zombie {
 		y = (int) (map.getZombieStart(index).y / tileSize);
 	}
 
+	public void loadZombieData(int x, int y, boolean running, boolean flipped) {
+		this.x = x; 
+		this.y = y; 
+		this.flipped = flipped; 
+		this.isRunning = running; 
+		
+	}
+
 	public Vector2f getTilePosition() {
 		return new Vector2f(x, y);
 	}
