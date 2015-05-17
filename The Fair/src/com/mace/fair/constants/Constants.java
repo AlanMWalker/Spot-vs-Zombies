@@ -36,6 +36,8 @@ public class Constants {
 	public static final String helpScreen_splash_loc = "res//HelpScreen.png";
 	public static final String creditsScreen_splash_loc = "res//CreditsScreen.png";
 	public static final String cheatsScreen_splash_loc = "res//CheatScreen.png";
+	public static final String winScreen_text_loc = "res//WinScreen.png";
+	public static final String loseScreen_text_loc = "res//LoseScreen.png";
 	public static final String overlay_img_loc = "res//pause_overlay.png";
 	public static final String playButton_img_loc = "res//play_button.png";
 	public static final String helpButton_img_loc = "res//help_button.png";
