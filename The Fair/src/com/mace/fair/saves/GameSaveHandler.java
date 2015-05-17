@@ -1,6 +1,5 @@
 package com.mace.fair.saves;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Formatter;
@@ -26,7 +25,7 @@ public class GameSaveHandler {
 		this.pills = pills;
 	}
 
-	public void saveGame(boolean updatingZombies) throws IOException {
+	public void saveGame(boolean updatingZombies, boolean cheatFrozen, boolean cheatExterminate) throws IOException {
 		/*
 		 * Save order = Player -> Zombies -> Pills -> Holes (map)
 		 */
@@ -34,7 +33,10 @@ public class GameSaveHandler {
 			save_file = new Formatter("spot_save_game.scr");
 
 			String updating = Boolean.toString(updatingZombies);
-			save_file.format("%s\n\n", updating);
+			String frozen = Boolean.toString(cheatFrozen);
+			String exterminate = Boolean.toString(cheatExterminate);
+			
+			save_file.format("%s\n%s\n%s\n\n", updating, frozen, exterminate);
 			savePlayer();
 			saveZombies();
 			savePills();
@@ -69,20 +71,35 @@ public class GameSaveHandler {
 
 			save_file.format("%d\n%d\n", x, y); // Save zombie posititions
 			// Save zombie sprite details
-			save_file.format("%s\n%s\n%s\n\n", isRunning, isFlipped, isAlive);
-
+			save_file.format("%s\n%s\n%s\n", isRunning, isFlipped, isAlive);
 		}
+		save_file.format("\n\n", (Object) null);
 	}
 
 	private void savePills() {
+		/*
+		 * Save pills and their eaten state to the map
+		 */
 		for (int i = 0; i < Constants.MAX_PILLS; ++i) {
-			int x;
-			int y;
+			int x = (int) pills.get(i).location().x;
+			int y = (int) pills.get(i).location().y;
+			String isEaten = Boolean.toString(pills.get(i).isPillEaten());
+			save_file.format("%d\n%d\n%s\n", x, y, isEaten);
 
 		}
+		save_file.format("\n\n", (Object) null);
 	}
 
 	private void saveMap() {
-
+		/*
+		 * Save any hole map locations to the game save file
+		 */
+		for (int i = 0; i < map.getWidth(); ++i) {
+			for (int j = 0; j < map.getHeight(); ++j) {
+				if (map.getTileProperty(i, j).equals("fallable")) {
+					save_file.format("%d\n%d\n", i, j);
+				}
+			}
+		}
 	}
 }

@@ -50,7 +50,7 @@ public class Pill {
 		// loop through an randomise the position again
 		x = rnd.nextInt(map.getWidth());
 		y = rnd.nextInt(map.getHeight());
-		while (map.getTileProperty(x, y).equals("fallable") || map.getTileProperty(x, y).equals("blocked") || isOnPlayer(x, y) || tooCloseToPill(x,y)) {
+		while (map.getTileProperty(x, y).equals("fallable") || map.getTileProperty(x, y).equals("blocked") || isOnPlayer(x, y) || tooCloseToPill(x, y)) {
 			x = rnd.nextInt(map.getWidth());
 			y = rnd.nextInt(map.getHeight());
 		}
@@ -122,5 +122,11 @@ public class Pill {
 
 	public boolean isPillEaten() {
 		return isEaten;
+	}
+
+	public void loadData(int x, int y, boolean eaten) {
+		this.x = x;
+		this.y = y;
+		this.isEaten = eaten;
 	}
 }

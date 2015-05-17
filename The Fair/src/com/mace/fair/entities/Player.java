@@ -62,12 +62,12 @@ public class Player {
 			else
 				g.drawImage(playerAura2, x * tileSize, y * tileSize);
 		}
-//		g.draw(collider);
+		// g.draw(collider);
 	}
 
 	public void update(GameContainer gc, StateBasedGame sbg, long delta, ArrayList<Pill> pills) throws SlickException {
 		Input input = gc.getInput(); // Input handling object
-		
+
 		if (input.isKeyPressed(Input.KEY_LEFT) || input.isKeyPressed(Input.KEY_A)) {
 			input.clearKeyPressedRecord();
 			if (map.getTileProperty(x - 1, y).equals("walkable") || map.getTileProperty(x - 1, y).equals("fallable")) {
@@ -167,11 +167,20 @@ public class Player {
 			++moveCount;
 		}
 	}
-	
+
 	public boolean auraState() {
 		return isAuraActive;
 	}
-	public boolean isFlippedSprite(){ 
+
+	public boolean isFlippedSprite() {
 		return flipped;
+	}
+
+	public void loadPlayerData(int x, int y, boolean flipped, boolean aura) {
+		this.x = x;
+		this.y = y;
+		this.flipped = flipped;
+		this.isAuraActive = aura;
+
 	}
 }
