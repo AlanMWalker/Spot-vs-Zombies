@@ -73,7 +73,7 @@ public class Map {
 				y = rnd.nextInt(map.getHeight());
 				map.getTileId(x, y, 0);
 
-				while (map.getTileId(x, y, 0) == Constants.WALL_TILE_ID || map.getTileId(x, y, 0) == Constants.HOLE_TILE_ID && isOldPosition(x, y)) {
+				while (map.getTileId(x, y, 0) == Constants.WALL_TILE_ID || map.getTileId(x, y, 0) == Constants.HOLE_TILE_ID && isOldPosition(x, y) && !isOnPlayer(x, y)) {
 					x = rnd.nextInt(map.getWidth());
 					y = rnd.nextInt(map.getHeight());
 					map.getTileId(x, y, 0);
@@ -91,6 +91,12 @@ public class Map {
 			if (x == oldX[i] && y == oldY[i])
 				return true;
 		}
+		return false;
+	}
+
+	private boolean isOnPlayer(int x, int y) {
+		if (x == (int) getPlayerStart().x && y == (int) getPlayerStart().y)
+			return true;
 		return false;
 	}
 

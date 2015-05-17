@@ -74,6 +74,9 @@ public class GameSaveHandler {
 	}
 
 	private void savePills() {
+		/* 
+		 * Save pills and their eaten state to the map
+		 */
 		for (int i = 0; i < Constants.MAX_PILLS; ++i) {
 			int x = (int) pills.get(i).location().x;
 			int y = (int) pills.get(i).location().y;
