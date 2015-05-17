@@ -40,4 +40,8 @@ public class LivesGUI {
 	public static void resetLives() {
 		lives = Constants.START_LIVES;
 	}
+
+	public static final int getLives() {
+		return lives;
+	}
 }

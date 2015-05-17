@@ -1,5 +1,6 @@
 package com.mace.fair.states;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.lwjgl.input.Mouse;
@@ -19,6 +20,7 @@ import com.mace.fair.entities.Zombie;
 import com.mace.fair.gui.LivesGUI;
 import com.mace.fair.map.Map;
 import com.mace.fair.pills.Pill;
+import com.mace.fair.saves.GameSaveHandler;
 import com.mace.fair.entities.Player;
 
 public class GameState1 extends BasicGameState {
@@ -35,10 +37,10 @@ public class GameState1 extends BasicGameState {
 	private static boolean updatingZombie = false;
 	private boolean isGameActive = true; // For if they hit escape
 	private boolean isMenu = false;
-	private Image menu, resume, overlay, winScreen, loseScreen; // TODO
-																// implement
+	private Image menu, resume, overlay, winScreen, loseScreen;
 	private Rectangle resumeButton, menuButton;
 	private float buttonX, buttonY;
+	private GameSaveHandler save;
 	private boolean gameWon, gameLost, cheatFrozen, cheatExterminate;
 
 	public GameState1(int stateID) {
@@ -117,7 +119,14 @@ public class GameState1 extends BasicGameState {
 			resumeButton = new Rectangle(buttonX, buttonY, resume.getWidth(), resume.getHeight());
 		if (menuButton == null)
 			menuButton = new Rectangle(buttonX, buttonY, resume.getWidth(), resume.getHeight());
-
+		
+		save = new GameSaveHandler(player, map, zombies, pills);
+		try {
+			save.saveGame();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
