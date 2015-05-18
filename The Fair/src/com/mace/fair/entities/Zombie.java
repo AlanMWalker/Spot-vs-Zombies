@@ -35,23 +35,25 @@ public class Zombie {
 	}
 
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+		flipped = false;
+		isRunning = false;
 		zombie1 = new Image(Constants.zombie1_image_loc);
 		zombie2 = new Image(Constants.zombie2_image_loc);
 		run1 = new Image(Constants.zombieAway1_img_loc);
 		run2 = new Image(Constants.zombieAway2_img_loc);
-		collider = new Rectangle(x * tileSize, y * tileSize, zombie1.getWidth(), zombie1.getHeight());
+		collider = new Rectangle(x * tileSize + zombie1.getWidth() / 4, y * tileSize + zombie1.getHeight() / 4, zombie1.getWidth() / 2, zombie1.getHeight() / 2);
 		isAlive = true;
 	}
 
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		if (!cheatExterminate) {
 			if (!flipped) {
-				if (isRunning)
+				if (!isRunning)
 					g.drawImage(zombie1, x * tileSize, y * tileSize);
 				else
 					g.drawImage(run1, x * tileSize, y * tileSize);
 			} else {
-				if (isRunning)
+				if (!isRunning)
 					g.drawImage(zombie2, x * tileSize, y * tileSize);
 				else
 					g.drawImage(run2, x * tileSize, y * tileSize);
@@ -65,6 +67,7 @@ public class Zombie {
 		this.cheatExterminate = cheatExterminate;
 
 		if (!cheatFrozen && !cheatExterminate) {
+
 			if (map.getTileProperty(x + moveBy.x, y + moveBy.y).equals("walkable")) {
 				x += moveBy.x;
 				y += moveBy.y;
@@ -72,6 +75,12 @@ public class Zombie {
 				updateRect();
 			} else if (map.getTileProperty(x + moveBy.x, y + moveBy.y).equals("fallable")) {
 				isAlive = false;
+			} else {
+				wallSlide(moveBy);
+				x += moveBy.x;
+				y += moveBy.y;
+				flipped = !flipped;
+				updateRect();
 			}
 
 			if (collider.intersects(p.getCollider()) && !isRunning) {
@@ -91,7 +100,13 @@ public class Zombie {
 	}
 
 	private void updateRect() {
-		collider.setLocation(x * tileSize, y * tileSize);
+		collider.setLocation(x * tileSize + zombie1.getWidth() / 4, y * tileSize + zombie1.getHeight() / 4);
+	}
+
+	private void wallSlide(Vector2f moveBy) {
+		if (map.getTileProperty(x + moveBy.x, y).equals("blocked")) {
+
+		}
 	}
 
 	private Vector2f determineDirection(Player p) {
@@ -125,7 +140,6 @@ public class Zombie {
 			temp.y = dy * -1;
 		}
 
-		// collider.setLocation((x + dx) * 64, (y + dy) * 64);
 		return temp;
 	}
 

@@ -159,9 +159,11 @@ public class GameState1 extends BasicGameState {
 				g.drawImage(menu, (localX + buttonX), localY + buttonY * 2.4f);
 			} else {
 				if (gameWon) {
+					g.drawImage(overlay, camera.getTranslation().x, camera.getTranslation().y);
 					g.drawImage(winScreen, camera.getTranslation().x, camera.getTranslation().y);
 				}
 				if (gameLost) {
+					g.drawImage(overlay, camera.getTranslation().x, camera.getTranslation().y);
 					g.drawImage(loseScreen, camera.getTranslation().x, camera.getTranslation().y);
 				}
 			}
@@ -188,17 +190,20 @@ public class GameState1 extends BasicGameState {
 
 		// QUICKSAVE
 		if (input.isKeyPressed(Input.KEY_F5)) {
-			try {
-				save.saveGame(updatingZombie, cheatFrozen, cheatExterminate);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if (!gameWon && !gameLost) {
+				try {
+					save.saveGame(updatingZombie, cheatFrozen, cheatExterminate);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 
 		if (input.isKeyPressed(Input.KEY_F9)) {
 			// TODO Quick-load
-			load.loadGame();
+			if (!gameLost && !gameWon)
+				load.loadGame();
 		}
 
 		if (isGameActive) {

@@ -46,7 +46,7 @@ public class Player {
 		playerAura1 = new Image(Constants.playerAura1_img_loc);
 		playerAura2 = new Image(Constants.playerAura2_img_loc);
 		flipped = false;
-		collider = new Rectangle(x * tileSize, y * tileSize, player1.getWidth(), player2.getHeight());
+		collider = new Rectangle(x * tileSize + player1.getWidth() / 4, y * tileSize + player2.getHeight() / 4, player1.getWidth() / 2, player2.getHeight() / 2);
 	}
 
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
@@ -62,7 +62,7 @@ public class Player {
 			else
 				g.drawImage(playerAura2, x * tileSize, y * tileSize);
 		}
-		// g.draw(collider);
+//		g.draw(collider);
 	}
 
 	public void update(GameContainer gc, StateBasedGame sbg, long delta, ArrayList<Pill> pills) throws SlickException {
@@ -134,11 +134,11 @@ public class Player {
 		moveCount = 0;
 		x = (int) map.getPlayerStart().x / tileSize;
 		y = (int) map.getPlayerStart().y / tileSize;
-		collider.setLocation(x * tileSize, y * tileSize);
+		collider.setLocation(x * tileSize + player1.getWidth() / 4, y * tileSize + player2.getHeight() / 4);
 	}
 
 	private void updateRect() {
-		collider.setLocation(x * tileSize, y * tileSize);
+		collider.setLocation(x * tileSize + player1.getWidth() / 4, y * tileSize + player2.getHeight() / 4);
 	}
 
 	public Vector2f getTilePosition() {

@@ -46,6 +46,7 @@ public class GameSaveHandler {
 			if (save_file != null)
 				save_file.close();
 		}
+		
 	}
 
 	private void savePlayer() throws IOException {
@@ -74,6 +75,7 @@ public class GameSaveHandler {
 			save_file.format("%s\n%s\n%s\n", isRunning, isFlipped, isAlive);
 		}
 		save_file.format("\n\n", (Object) null);
+		
 	}
 
 	private void savePills() {
