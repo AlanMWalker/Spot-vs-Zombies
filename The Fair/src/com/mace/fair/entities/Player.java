@@ -62,7 +62,7 @@ public class Player {
 			else
 				g.drawImage(playerAura2, x * tileSize, y * tileSize);
 		}
-//		g.draw(collider);
+		// g.draw(collider);
 	}
 
 	public void update(GameContainer gc, StateBasedGame sbg, long delta, ArrayList<Pill> pills) throws SlickException {
