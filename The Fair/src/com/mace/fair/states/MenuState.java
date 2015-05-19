@@ -16,12 +16,13 @@ public class MenuState extends BasicGameState {
 
 	private final int stateID;
 	private float playX, playY;
-	private Image background, text, playButton, helpButton, creditsButton, cheatsButton;
+	private Image background, text, playButton, helpButton, creditsButton, cheatsButton, quitButton;
 	private int mouseX, mouseY;
 	private int helpX, helpY;
 	private int cheatX, cheatY;
 	private int creditsX, creditsY;
-	private Rectangle play, credits, help, cheats;
+	private int quitX, quitY;
+	private Rectangle play, credits, help, cheats, quit;
 	private boolean isShowingCheats;
 	private int playPressedCount = 0;
 
@@ -37,6 +38,7 @@ public class MenuState extends BasicGameState {
 		helpButton = new Image(Constants.helpButton_img_loc).getScaledCopy(0.5f);
 		creditsButton = new Image(Constants.creditsButton_img_loc).getScaledCopy(0.5f);
 		cheatsButton = new Image(Constants.cheatsButton_img_loc).getScaledCopy(0.5f);
+		quitButton = new Image(Constants.quitButton_img_loc).getScaledCopy(0.5f);
 
 		playX = 179 - (playButton.getWidth() / 2);
 		playY = 399 - playButton.getHeight() - 40;
@@ -50,11 +52,15 @@ public class MenuState extends BasicGameState {
 		creditsX = (Display.getWidth() / 2) - (creditsButton.getWidth() / 2);
 		creditsY = 300;
 
+		quitX = creditsX;
+		quitY = (int) (creditsY + quitButton.getWidth()/1.3f);
+
 		play = new Rectangle(playX, playY, playButton.getWidth(), playButton.getHeight());
 		help = new Rectangle(helpX, helpY, helpButton.getWidth(), helpButton.getHeight());
 		cheats = new Rectangle(cheatX, cheatY, cheatsButton.getWidth(), cheatsButton.getHeight());
 		credits = new Rectangle(creditsX, creditsY, creditsButton.getWidth(), creditsButton.getHeight());
-
+		quit = new Rectangle(quitX, quitY, quitButton.getWidth(), quitButton.getHeight());
+		
 		isShowingCheats = false;
 
 	}
@@ -68,6 +74,7 @@ public class MenuState extends BasicGameState {
 		if (isShowingCheats)
 			g.drawImage(cheatsButton, cheatX, cheatY);
 		g.drawImage(creditsButton, creditsX, creditsY);
+		g.drawImage(quitButton, quitX, quitY);
 	}
 
 	@Override
@@ -103,7 +110,11 @@ public class MenuState extends BasicGameState {
 		} else {
 			isShowingCheats = false;
 		}
-
+		if(quit.contains(mouseX, mouseY)) {
+			if(gc.getInput().isMouseButtonDown(0)){ 
+				gc.exit();
+			}
+		}
 	}
 
 	@Override

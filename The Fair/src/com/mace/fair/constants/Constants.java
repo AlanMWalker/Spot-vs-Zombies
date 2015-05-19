@@ -41,6 +41,7 @@ public class Constants {
 	public static final String overlay_img_loc = "res//pause_overlay.png";
 	public static final String playButton_img_loc = "res//play_button.png";
 	public static final String helpButton_img_loc = "res//help_button.png";
+	public static final String quitButton_img_loc = "res//quit_button.png";
 	public static final String creditsButton_img_loc = "res//credits_button.png";
 	public static final String cheatsButton_img_loc = "res//cheats_button.png";
 	public static final String resumeButton_img_loc = "res//resume.png";

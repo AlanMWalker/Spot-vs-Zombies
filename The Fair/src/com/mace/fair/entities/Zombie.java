@@ -82,7 +82,7 @@ public class Zombie {
 			} else if (map.getTileProperty(x + moveBy.x, y + moveBy.y).equals("fallable")) {
 				isAlive = false;
 			} else {
-				wallSlide(moveBy);
+				wallSlide(moveBy, new Vector2f(Math.abs(x - p.getTilePosition().x), Math.abs(y - p.getTilePosition().y)));
 				x += moveBy.x;
 				y += moveBy.y;
 				flipped = !flipped;
@@ -117,13 +117,15 @@ public class Zombie {
 		collider.setLocation(x * tileSize + zombie1.getWidth() / 4, y * tileSize + zombie1.getHeight() / 4);
 	}
 
-	private void wallSlide(Vector2f moveBy) {
+	private void wallSlide(Vector2f moveBy, Vector2f distanceFromPlayer) {
 		/*
 		 * Zombie AI plan -> 1) Check where's free around the zombie 2)
 		 * Whichever closest moves them to spot wins
 		 */
 		checkWalls();
-		findBestRoute(moveBy);
+		Vector2f temp = findBestRoute(moveBy, distanceFromPlayer);
+		moveBy.x = temp.x;
+		moveBy.y = temp.y;
 	}
 
 	private void checkWalls() {
@@ -175,11 +177,9 @@ public class Zombie {
 		} else {
 			directions[Constants.BOTTOM_RIGHT] = true;
 		}
-		for (int i = 0; i < directions.length; ++i)
-			System.out.println("My value is " + directions[i]);
 	}
 
-	private Vector2f findBestRoute(Vector2f moveBy) {
+	private Vector2f findBestRoute(Vector2f moveBy, Vector2f distanceFromPlayer) {
 		ArrayList<Vector2f> vectors = new ArrayList<Vector2f>();
 		ArrayList<Byte> listOfValues = new ArrayList<Byte>();
 		boolean found = false;
@@ -227,13 +227,22 @@ public class Zombie {
 				selectedRoute.y = 1;
 				break;
 			}
-			if (selectedRoute.x != moveBy.x && selectedRoute.y != moveBy.y) {
-				directions[listOfValues.get(i)] = false;
+			if (distanceFromPlayer.x < distanceFromPlayer.y) {
+				if (selectedRoute.x != moveBy.x)
+					directions[listOfValues.get(i)] = false;
+				else
+					vectors.add(selectedRoute);
 			} else {
-				vectors.add(selectedRoute);
+				if (selectedRoute.y != moveBy.y)
+					directions[listOfValues.get(i)] = false;
+				else
+					vectors.add(selectedRoute);
 			}
 		}
-		return vectors;
+		if (vectors.size() > 0)
+			return (vectors.get(0));
+		else
+			return new Vector2f(0, 0);
 	}
 
 	private Vector2f determineDirection(Player p) {

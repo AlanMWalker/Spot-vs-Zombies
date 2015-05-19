@@ -28,6 +28,8 @@ public class GameState1 extends BasicGameState {
 
 	private final int MAX_ZOMBIES;
 	private final int MAX_PILLS;
+	private float buttonX, buttonY;
+	private float saveTimer, loadTimer;
 	private int stateID;
 	private int mouseX, mouseY;
 	private ArrayList<Zombie> zombies;
@@ -38,9 +40,9 @@ public class GameState1 extends BasicGameState {
 	private static boolean updatingZombie = false;
 	private boolean isGameActive = true; // For if they hit escape
 	private boolean isMenu = false;
+	private boolean updateLoad, updateSave;
 	private Image menu, resume, overlay, winScreen, loseScreen;
 	private Rectangle resumeButton, menuButton;
-	private float buttonX, buttonY;
 	private GameSaveHandler save;
 	private GameLoadHandler load;
 	private boolean gameWon, gameLost, cheatFrozen, cheatExterminate;
@@ -56,6 +58,8 @@ public class GameState1 extends BasicGameState {
 		gameLost = false;
 		cheatFrozen = false;
 		cheatExterminate = false;
+		updateLoad = false;
+		updateSave = false;
 
 		LivesGUI.init();
 
