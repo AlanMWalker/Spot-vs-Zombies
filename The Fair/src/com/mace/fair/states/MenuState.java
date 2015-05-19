@@ -52,15 +52,15 @@ public class MenuState extends BasicGameState {
 		creditsX = (Display.getWidth() / 2) - (creditsButton.getWidth() / 2);
 		creditsY = 300;
 
-		quitX = creditsX;
-		quitY = (int) (creditsY + quitButton.getWidth()/1.3f);
+		quitX = 640 - quitButton.getWidth();
+		quitY = 480 - quitButton.getHeight();
 
 		play = new Rectangle(playX, playY, playButton.getWidth(), playButton.getHeight());
 		help = new Rectangle(helpX, helpY, helpButton.getWidth(), helpButton.getHeight());
 		cheats = new Rectangle(cheatX, cheatY, cheatsButton.getWidth(), cheatsButton.getHeight());
 		credits = new Rectangle(creditsX, creditsY, creditsButton.getWidth(), creditsButton.getHeight());
 		quit = new Rectangle(quitX, quitY, quitButton.getWidth(), quitButton.getHeight());
-		
+
 		isShowingCheats = false;
 
 	}
@@ -110,8 +110,8 @@ public class MenuState extends BasicGameState {
 		} else {
 			isShowingCheats = false;
 		}
-		if(quit.contains(mouseX, mouseY)) {
-			if(gc.getInput().isMouseButtonDown(0)){ 
+		if (quit.contains(mouseX, mouseY)) {
+			if (gc.getInput().isMouseButtonDown(0)) {
 				gc.exit();
 			}
 		}

@@ -46,6 +46,8 @@ public class Constants {
 	public static final String cheatsButton_img_loc = "res//cheats_button.png";
 	public static final String resumeButton_img_loc = "res//resume.png";
 	public static final String menuButton_img_loc = "res//menu.png";
+	public static final String saveIcon_img_loc = "res//save_icon.png";
+	public static final String loadIcon_img_loc = "res//load_icon.png";
 
 	/****************************
 	 * GAME CONSTANTS

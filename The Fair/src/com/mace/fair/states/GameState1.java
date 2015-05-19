@@ -41,7 +41,7 @@ public class GameState1 extends BasicGameState {
 	private boolean isGameActive = true; // For if they hit escape
 	private boolean isMenu = false;
 	private boolean updateLoad, updateSave;
-	private Image menu, resume, overlay, winScreen, loseScreen;
+	private Image menu, resume, overlay, winScreen, loseScreen, saveIcon, loadIcon;
 	private Rectangle resumeButton, menuButton;
 	private GameSaveHandler save;
 	private GameLoadHandler load;
@@ -118,6 +118,10 @@ public class GameState1 extends BasicGameState {
 			winScreen = new Image(Constants.winScreen_text_loc);
 		if (loseScreen == null)
 			loseScreen = new Image(Constants.loseScreen_text_loc);
+		if (saveIcon == null)
+			saveIcon = new Image(Constants.saveIcon_img_loc).getScaledCopy(0.5f);
+		if (loadIcon == null)
+			loadIcon = new Image(Constants.loadIcon_img_loc).getScaledCopy(0.5f);
 
 		buttonX = resume.getWidth() / 0.9f;
 		buttonY = resume.getHeight() / 1.35f;
@@ -173,6 +177,12 @@ public class GameState1 extends BasicGameState {
 				}
 			}
 		}
+		if (updateLoad) {
+			g.drawImage(loadIcon, camera.getTranslation().x + loadIcon.getWidth()/2, camera.getTranslation().y + loadIcon.getHeight()/2);
+		}
+		if (updateSave) {
+			g.drawImage(saveIcon, camera.getTranslation().x + saveIcon.getWidth()/2, camera.getTranslation().y + saveIcon.getHeight()/2);
+		}
 	}
 
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
@@ -198,17 +208,36 @@ public class GameState1 extends BasicGameState {
 			if (!gameWon && !gameLost) {
 				try {
 					save.saveGame(updatingZombie, cheatFrozen, cheatExterminate);
+					updateSave = true;
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 		}
-
+		
 		if (input.isKeyPressed(Input.KEY_F9)) {
 			// TODO Quick-load
-			if (!gameLost && !gameWon)
+			if (!gameLost && !gameWon){
 				load.loadGame();
+				updateLoad = true;
+			}
+		}
+		if (updateLoad) {
+			if (loadTimer / 1000 < 2)
+				loadTimer += delta;
+			else
+				updateLoad = false;
+		} else {
+			loadTimer = 0;
+		}
+		if (updateSave) {
+			if (saveTimer / 1000 < 2)
+				saveTimer += delta;
+			else
+				updateSave = false;
+		} else {
+			saveTimer = 0;
 		}
 
 		if (isGameActive) {
