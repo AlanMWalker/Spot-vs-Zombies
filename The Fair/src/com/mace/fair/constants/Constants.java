@@ -68,4 +68,16 @@ public class Constants {
 	public final static int HelpMenuState = 2;
 	public final static int CreditsMenuState = 3;
 	public final static int CheatsMenuState = 4;
+
+	/*****************************
+	 * ZOMBIE COLLISION CONSTANTS
+	 ****************************/
+	public static final byte TOP_LEFT = 0;
+	public static final byte TOP_CENTRE = 1;
+	public static final byte TOP_RIGHT = 2;
+	public static final byte MIDDLE_LEFT = 3;
+	public static final byte MIDDLE_RIGHT = 4;
+	public static final byte BOTTOM_LEFT = 5;
+	public static final byte BOTTOM_CENTRE = 6;
+	public static final byte BOTTOM_RIGHT = 7;
 }

@@ -77,7 +77,7 @@ public class GameState1 extends BasicGameState {
 		if (zombies == null) {
 			zombies = new ArrayList<Zombie>();
 			for (int i = 0; i < MAX_ZOMBIES; ++i) {
-				zombies.add(new Zombie(map, i));
+				zombies.add(new Zombie(map, i, zombies));
 				zombies.get(i).init(gc, sbg);
 			}
 		} else {
@@ -137,6 +137,7 @@ public class GameState1 extends BasicGameState {
 		for (Pill p : pills) {
 			p.render(g);
 		}
+
 		for (Zombie z : zombies) {
 			if (z.isZombieAlive()) {
 				z.render(gc, sbg, g);

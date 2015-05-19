@@ -1,5 +1,7 @@
 package com.mace.fair.entities;
 
+import java.util.ArrayList;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -17,18 +19,21 @@ public class Zombie {
 	private Map map;
 	private final int tileSize, index;
 	private int x, y;
+	private ArrayList<Zombie> zombies;
 	private Image zombie1, zombie2;
 	private Image run1, run2;
 	private Rectangle collider;
+	private boolean directions[];
 	private boolean resetNextMove = false;
 	private boolean flipped;
 	private boolean isRunning; // Is this zombie running away from spot
 	private boolean isAlive;
 	private boolean cheatExterminate;
 
-	public Zombie(Map m, int index) {
+	public Zombie(Map m, int index, ArrayList<Zombie> zombies) {
 		this.map = m;
 		this.index = index;
+		this.zombies = zombies;
 		tileSize = Constants.TILESIZE;
 		x = (int) (m.getZombieStart(index).x / tileSize);
 		y = (int) (m.getZombieStart(index).y / tileSize);
@@ -37,6 +42,7 @@ public class Zombie {
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		flipped = false;
 		isRunning = false;
+		directions = new boolean[8];
 		zombie1 = new Image(Constants.zombie1_image_loc);
 		zombie2 = new Image(Constants.zombie2_image_loc);
 		run1 = new Image(Constants.zombieAway1_img_loc);
@@ -83,6 +89,14 @@ public class Zombie {
 				updateRect();
 			}
 
+			for (Zombie z : zombies) {
+				if (z != this) {
+					if (collider.intersects(z.getCollider())) {
+						this.resetZombie();
+					}
+				}
+			}
+
 			if (collider.intersects(p.getCollider()) && !isRunning) {
 				if (resetNextMove) {
 					x = (int) (map.getZombieStart(index).x / tileSize);
@@ -104,9 +118,65 @@ public class Zombie {
 	}
 
 	private void wallSlide(Vector2f moveBy) {
-		if (map.getTileProperty(x + moveBy.x, y).equals("blocked")) {
+		/* 
+		 * Zombie AI plan -> 
+		 * 1) Check where's free around the zombie
+		 * 2) Whichever closest moves them to spot wins
+		 */
+		checkWalls();
+	}
 
+	private void checkWalls() {
+
+		if (map.getTileProperty(x - 1, y - 1).equals("blocked")) {
+			directions[Constants.TOP_LEFT] = false;
+		} else {
+			directions[Constants.TOP_LEFT] = true;
 		}
+
+		if (map.getTileProperty(x, y - 1).equals("blocked")) {
+			directions[Constants.TOP_CENTRE] = false;
+		} else {
+			directions[Constants.TOP_CENTRE] = true;
+		}
+
+		if (map.getTileProperty(x + 1, y - 1).equals("blocked")) {
+			directions[Constants.TOP_RIGHT] = false;
+		} else {
+			directions[Constants.TOP_RIGHT] = true;
+		}
+
+		if (map.getTileProperty(x - 1, y).equals("blocked")) {
+			directions[Constants.MIDDLE_LEFT] = false;
+		} else {
+			directions[Constants.MIDDLE_LEFT] = true;
+		}
+
+		if (map.getTileProperty(x + 1, y).equals("blocked")) {
+			directions[Constants.MIDDLE_RIGHT] = false;
+		} else {
+			directions[Constants.MIDDLE_RIGHT] = true;
+		}
+
+		if (map.getTileProperty(x - 1, y + 1).equals("blocked")) {
+			directions[Constants.BOTTOM_LEFT] = false;
+		} else {
+			directions[Constants.BOTTOM_LEFT] = true;
+		}
+
+		if (map.getTileProperty(x, y + 1).equals("blocked")) {
+			directions[Constants.BOTTOM_CENTRE] = false;
+		} else {
+			directions[Constants.BOTTOM_CENTRE] = true;
+		}
+
+		if (map.getTileProperty(x + 1, y + 1).equals("blocked")) {
+			directions[Constants.BOTTOM_RIGHT] = false;
+		} else {
+			directions[Constants.BOTTOM_RIGHT] = true;
+		}
+		for (int i = 0; i < directions.length; ++i)
+			System.out.println("My value is " + directions[i]);
 	}
 
 	private Vector2f determineDirection(Player p) {
@@ -175,5 +245,9 @@ public class Zombie {
 
 	public boolean isSpriteFlipped() {
 		return flipped;
+	}
+
+	public Rectangle getCollider() {
+		return collider;
 	}
 }
