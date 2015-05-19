@@ -179,46 +179,61 @@ public class Zombie {
 			System.out.println("My value is " + directions[i]);
 	}
 
-	private void findBestRoute(Vector2f moveBy) {
+	private Vector2f findBestRoute(Vector2f moveBy) {
+		ArrayList<Vector2f> vectors = new ArrayList<Vector2f>();
+		ArrayList<Byte> listOfValues = new ArrayList<Byte>();
+		boolean found = false;
+		Vector2f selectedRoute = new Vector2f(0, 0);
 
 		byte counter = 0;
-		while (counter < directions.length && !directions[counter]) {
+
+		while (counter < directions.length) {
+			if (directions[counter])
+				listOfValues.add(counter);
 			++counter;
 		}
-		switch (counter) {
-		case Constants.TOP_LEFT:
-			moveBy.x = -1;
-			moveBy.y = -1;
-			break;
-		case Constants.TOP_CENTRE:
-			moveBy.x = 0;
-			moveBy.y = -1;
-			break;
-		case Constants.TOP_RIGHT:
-			moveBy.x = 1;
-			moveBy.y = -1;
-			break;
-		case Constants.MIDDLE_LEFT:
-			moveBy.x = -1;
-			moveBy.y = 0;
-			break;
-		case Constants.MIDDLE_RIGHT:
-			moveBy.x = 1;
-			moveBy.y = 0;
-			break;
-		case Constants.BOTTOM_LEFT:
-			moveBy.x = -1;
-			moveBy.y = 1;
-			break;
-		case Constants.BOTTOM_CENTRE:
-			moveBy.x = 0;
-			moveBy.y = 1;
-			break;
-		case Constants.BOTTOM_RIGHT:
-			moveBy.x = 1;
-			moveBy.y = 1;
-			break;
+		for (int i = 0; i < listOfValues.size(); ++i) {
+			switch (listOfValues.get(i)) {
+			case Constants.TOP_LEFT:
+				selectedRoute.x = -1;
+				selectedRoute.y = -1;
+				break;
+			case Constants.TOP_CENTRE:
+				selectedRoute.x = 0;
+				selectedRoute.y = -1;
+				break;
+			case Constants.TOP_RIGHT:
+				selectedRoute.x = 1;
+				selectedRoute.y = -1;
+				break;
+			case Constants.MIDDLE_LEFT:
+				selectedRoute.x = -1;
+				selectedRoute.y = 0;
+				break;
+			case Constants.MIDDLE_RIGHT:
+				selectedRoute.x = 1;
+				selectedRoute.y = 0;
+				break;
+			case Constants.BOTTOM_LEFT:
+				selectedRoute.x = -1;
+				selectedRoute.y = 1;
+				break;
+			case Constants.BOTTOM_CENTRE:
+				selectedRoute.x = 0;
+				selectedRoute.y = 1;
+				break;
+			case Constants.BOTTOM_RIGHT:
+				selectedRoute.x = 1;
+				selectedRoute.y = 1;
+				break;
+			}
+			if (selectedRoute.x != moveBy.x && selectedRoute.y != moveBy.y) {
+				directions[listOfValues.get(i)] = false;
+			} else {
+				vectors.add(selectedRoute);
+			}
 		}
+		return vectors;
 	}
 
 	private Vector2f determineDirection(Player p) {
