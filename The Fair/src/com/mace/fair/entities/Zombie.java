@@ -118,12 +118,12 @@ public class Zombie {
 	}
 
 	private void wallSlide(Vector2f moveBy) {
-		/* 
-		 * Zombie AI plan -> 
-		 * 1) Check where's free around the zombie
-		 * 2) Whichever closest moves them to spot wins
+		/*
+		 * Zombie AI plan -> 1) Check where's free around the zombie 2)
+		 * Whichever closest moves them to spot wins
 		 */
 		checkWalls();
+		findBestRoute(moveBy);
 	}
 
 	private void checkWalls() {
@@ -177,6 +177,48 @@ public class Zombie {
 		}
 		for (int i = 0; i < directions.length; ++i)
 			System.out.println("My value is " + directions[i]);
+	}
+
+	private void findBestRoute(Vector2f moveBy) {
+
+		byte counter = 0;
+		while (counter < directions.length && !directions[counter]) {
+			++counter;
+		}
+		switch (counter) {
+		case Constants.TOP_LEFT:
+			moveBy.x = -1;
+			moveBy.y = -1;
+			break;
+		case Constants.TOP_CENTRE:
+			moveBy.x = 0;
+			moveBy.y = -1;
+			break;
+		case Constants.TOP_RIGHT:
+			moveBy.x = 1;
+			moveBy.y = -1;
+			break;
+		case Constants.MIDDLE_LEFT:
+			moveBy.x = -1;
+			moveBy.y = 0;
+			break;
+		case Constants.MIDDLE_RIGHT:
+			moveBy.x = 1;
+			moveBy.y = 0;
+			break;
+		case Constants.BOTTOM_LEFT:
+			moveBy.x = -1;
+			moveBy.y = 1;
+			break;
+		case Constants.BOTTOM_CENTRE:
+			moveBy.x = 0;
+			moveBy.y = 1;
+			break;
+		case Constants.BOTTOM_RIGHT:
+			moveBy.x = 1;
+			moveBy.y = 1;
+			break;
+		}
 	}
 
 	private Vector2f determineDirection(Player p) {
