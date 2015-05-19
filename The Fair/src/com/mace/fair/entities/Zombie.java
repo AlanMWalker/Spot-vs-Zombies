@@ -1,6 +1,7 @@
 package com.mace.fair.entities;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -23,6 +24,7 @@ public class Zombie {
 	private Image zombie1, zombie2;
 	private Image run1, run2;
 	private Rectangle collider;
+	private Random rnd;
 	private boolean directions[];
 	private boolean resetNextMove = false;
 	private boolean flipped;
@@ -49,6 +51,7 @@ public class Zombie {
 		run2 = new Image(Constants.zombieAway2_img_loc);
 		collider = new Rectangle(x * tileSize + zombie1.getWidth() / 4, y * tileSize + zombie1.getHeight() / 4, zombie1.getWidth() / 2, zombie1.getHeight() / 2);
 		isAlive = true;
+		rnd = new Random(System.currentTimeMillis());
 	}
 
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
@@ -182,7 +185,6 @@ public class Zombie {
 	private Vector2f findBestRoute(Vector2f moveBy, Vector2f distanceFromPlayer) {
 		ArrayList<Vector2f> vectors = new ArrayList<Vector2f>();
 		ArrayList<Byte> listOfValues = new ArrayList<Byte>();
-		boolean found = false;
 		Vector2f selectedRoute = new Vector2f(0, 0);
 
 		byte counter = 0;
@@ -240,7 +242,7 @@ public class Zombie {
 			}
 		}
 		if (vectors.size() > 0)
-			return (vectors.get(0));
+			return (vectors.get(rnd.nextInt(vectors.size())));
 		else
 			return new Vector2f(0, 0);
 	}
