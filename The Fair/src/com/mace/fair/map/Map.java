@@ -51,7 +51,7 @@ public class Map {
 				oldY[i] = y;
 				map.getTileId(x, y, 0);
 
-				while (map.getTileId(x, y, 0) == Constants.WALL_TILE_ID || map.getTileId(x, y, 0) == Constants.HOLE_TILE_ID && !isOnPlayer(x, y)) {
+				while (map.getTileId(x, y, 0) == Constants.WALL_TILE_ID || map.getTileId(x, y, 0) == Constants.HOLE_TILE_ID || isOnPlayer(x, y) || isOnZombie(x, y)) {
 					x = rnd.nextInt(map.getWidth());
 					y = rnd.nextInt(map.getHeight());
 					map.getTileId(x, y, 0);
@@ -72,7 +72,7 @@ public class Map {
 				y = rnd.nextInt(map.getHeight());
 				map.getTileId(x, y, 0);
 
-				while (map.getTileId(x, y, 0) == Constants.WALL_TILE_ID || map.getTileId(x, y, 0) == Constants.HOLE_TILE_ID && isOldPosition(x, y) && !isOnPlayer(x, y)) {
+				while (map.getTileId(x, y, 0) == Constants.WALL_TILE_ID || map.getTileId(x, y, 0) == Constants.HOLE_TILE_ID || isOldPosition(x, y) || isOnPlayer(x, y) || isOnZombie(x, y)) {
 					x = rnd.nextInt(map.getWidth());
 					y = rnd.nextInt(map.getHeight());
 					map.getTileId(x, y, 0);
@@ -89,6 +89,15 @@ public class Map {
 		for (int i = 0; i < MAX_HOLES; ++i) {
 			if (x == oldX[i] && y == oldY[i])
 				return true;
+		}
+		return false;
+	}
+
+	private boolean isOnZombie(int x, int y) {
+		for (int i = 0; i < Constants.MAX_ZOMBIES; ++i) {
+			if (x == this.getZombieStart(i).x && y == this.getZombieStart(i).y) {
+				return true;
+			}
 		}
 		return false;
 	}

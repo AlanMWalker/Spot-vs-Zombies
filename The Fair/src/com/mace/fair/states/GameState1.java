@@ -178,10 +178,10 @@ public class GameState1 extends BasicGameState {
 			}
 		}
 		if (updateLoad) {
-			g.drawImage(loadIcon, camera.getTranslation().x + loadIcon.getWidth()/2, camera.getTranslation().y + loadIcon.getHeight()/2);
+			g.drawImage(loadIcon, camera.getTranslation().x + loadIcon.getWidth() / 2, camera.getTranslation().y + loadIcon.getHeight() / 2);
 		}
 		if (updateSave) {
-			g.drawImage(saveIcon, camera.getTranslation().x + saveIcon.getWidth()/2, camera.getTranslation().y + saveIcon.getHeight()/2);
+			g.drawImage(saveIcon, camera.getTranslation().x + saveIcon.getWidth() / 2, camera.getTranslation().y + saveIcon.getHeight() / 2);
 		}
 	}
 
@@ -203,6 +203,12 @@ public class GameState1 extends BasicGameState {
 		if (input.isKeyPressed(Input.KEY_X))
 			cheatExterminate = !cheatExterminate;
 
+		if (input.isKeyPressed(Input.KEY_E)) {
+			for (int i = 0; i < MAX_PILLS; ++i) {
+				if (!pills.get(i).isPillEaten())
+					pills.get(i).eatPill();
+			}
+		}
 		// QUICKSAVE
 		if (input.isKeyPressed(Input.KEY_F5)) {
 			if (!gameWon && !gameLost) {
@@ -210,15 +216,13 @@ public class GameState1 extends BasicGameState {
 					save.saveGame(updatingZombie, cheatFrozen, cheatExterminate);
 					updateSave = true;
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 		}
-		
+
 		if (input.isKeyPressed(Input.KEY_F9)) {
-			// TODO Quick-load
-			if (!gameLost && !gameWon){
+			if (!gameLost && !gameWon) {
 				load.loadGame();
 				updateLoad = true;
 			}
@@ -315,8 +319,9 @@ public class GameState1 extends BasicGameState {
 		if (zombieCounter == MAX_ZOMBIES && pillCounter == MAX_PILLS) {
 			// LivesGUI.resetLives();
 			gameWon = true;
+		} else if (cheatExterminate && pillCounter == MAX_PILLS) {
+			gameWon = true;
 		}
-
 	}
 
 	public void loadData(boolean update, boolean frozen, boolean exterminate) {
